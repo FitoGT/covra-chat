@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { generateCoverLetter } from './client/api-client'
+import covraIcon from './assets/covra-icon.png'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -65,13 +66,16 @@ function App() {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <header className="bg-white shadow-sm py-4 px-6">
-        <h1 className="text-xl font-semibold text-gray-800">Cover Letter Generator</h1>
+        <div className="flex items-center space-x-3">
+          <img src={covraIcon} alt="Covra Icon" className="h-8 w-8" />
+          <h1 className="text-xl font-semibold text-gray-800">Cover Letter Generator</h1>
+        </div>
       </header>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            <p className="text-lg mb-2">Welcome to Cover Letter Generator</p>
+            <p className="text-lg mb-2">Welcome to Covra Chat, your AI assistant for Cover Letters</p>
             <p>Please paste your CV to get started</p>
           </div>
         ) : (

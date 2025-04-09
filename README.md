@@ -1,5 +1,10 @@
 # Cover Letter Generator
 
+<div align="center">
+  <img src="frontend/src/assets/covra-icon.png" alt="Covra Logo" width="100"/>
+  <h1>Cover Letter Generator</h1>
+</div>
+
 A modern web application that generates personalized cover letters using AI. Built with React, FastAPI, and powered by Cohere AI.
 
 ## Features
