@@ -13,6 +13,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState<'cv' | 'job' | 'chat'>('cv')
+  const [cv, setCv] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -32,6 +33,7 @@ function App() {
     setError('')
 
     if (step === 'cv') {
+      setCv(userMessage)
       setMessages([{ role: 'user', content: `CV: ${userMessage}` }])
       setStep('job')
       return
@@ -52,7 +54,6 @@ function App() {
     setError('')
 
     try {
-      const cv = messages[0].content.replace('CV: ', '')
       const coverLetter = await generateCoverLetter(cv, jobDescription)
       setMessages(prev => [...prev, { role: 'assistant', content: coverLetter }])
     } catch (err) {
@@ -63,12 +64,27 @@ function App() {
     }
   }
 
+  const handleNewCoverLetter = () => {
+    setMessages([{ role: 'user', content: `CV: ${cv}` }])
+    setStep('job')
+  }
+
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <header className="bg-white shadow-sm py-4 px-6">
-        <div className="flex items-center space-x-3">
-          <img src={covraIcon} alt="Covra Icon" className="h-8 w-8" />
-          <h1 className="text-xl font-semibold text-gray-800">Cover Letter Generator</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <img src={covraIcon} alt="Covra Icon" className="h-8 w-8" />
+            <h1 className="text-xl font-semibold text-gray-800">Cover Letter Generator</h1>
+          </div>
+          {step === 'chat' && (
+            <button
+              onClick={handleNewCoverLetter}
+              className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              New Cover Letter
+            </button>
+          )}
         </div>
       </header>
 
