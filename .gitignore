@@ -36,3 +36,4 @@ frontend/yarn-error.log*
 # Testing
 frontend/coverage/
 backend/.pytest_cache/ 
+backend/test.py

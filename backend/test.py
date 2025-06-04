@@ -443,4 +443,51 @@ tree.insert(6)
 tree.insert(15)
 tree.insert(170)
 
-print(tree.lookup(66))
+# print(tree.lookup(66))
+
+
+def merge_sorted_array(nums1, nums2, m, n):
+    x, y = m-1, n-1
+
+    for z in range(m + n - 1, -1, -1):
+        if x < 0:
+            nums1[z] = nums2[y]
+            y -= 1
+        elif y < 0:
+            break
+        elif nums1[x] > nums2[y]:
+            nums1[z] = nums1[x]
+        else:
+            nums1[z] = nums2[y]
+            y -= 1
+
+
+# loop through the array and:
+# store the index with the lowest value first -> perfect time to buy
+# loop through the array begining at the time you buy (index of the buying stock):
+# store the index with the highst value
+# if the lowest price is at the end of the array there is no profit, return 0
+arr = [7, 6, 4, 3, 1]
+
+
+def max_profit(array):
+    lowest_index = 0
+    min_price_so_far = array[0]
+    max_price_so_far = 0
+
+    length = len(array)
+    for n in range(0, length):
+        if array[n] < min_price_so_far:
+            min_price_so_far = array[n]
+            lowest_index = n
+
+    for n in range(lowest_index, length):
+        if array[n] > max_price_so_far:
+            max_price_so_far = array[n]
+
+    # return max_price_so_far - min_price_so_far
+    print(min_price_so_far)
+    print(max_price_so_far)
+
+
+max_profit(arr)
