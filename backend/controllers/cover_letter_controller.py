@@ -1,15 +1,10 @@
 from clients.cohere_ai import CohereAI
 from fastapi import APIRouter
-from pydantic import BaseModel
+from dtos.cover_letters_dto import CoverLetterRequest
 
 
 router = APIRouter(prefix="/cover-letter", tags=["Cover Letters"])
 cohere_ai = CohereAI()
-
-
-class CoverLetterRequest(BaseModel):
-    cv: str
-    job_description: str
 
 
 @router.post("/generate")
