@@ -6,7 +6,7 @@
  */
 export const generateCoverLetter = async (cv: string, jobDescription: string): Promise<string> => {
   try {
-    const response = await fetch('http://localhost:8000/generate-cover-letter', {
+    const response = await fetch('http://localhost:8000/cover-letter/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
