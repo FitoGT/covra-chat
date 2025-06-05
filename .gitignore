@@ -2,7 +2,8 @@
 frontend/node_modules/
 backend/venv/
 backend/__pycache__/
-backend/*.pyc
+backend/**/*.pyc
+backend/**/__pycache__/
 
 # Environment variables
 frontend/.env
@@ -11,6 +12,7 @@ frontend/.env.*.local
 backend/.env
 backend/.env.local
 backend/.env.*.local
+.env
 
 # Build outputs
 frontend/dist/
@@ -35,4 +37,4 @@ frontend/yarn-error.log*
 
 # Testing
 frontend/coverage/
-backend/.pytest_cache/ 
+backend/.pytest_cache/
