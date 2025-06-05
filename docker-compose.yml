@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: covra_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - covra_db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: covra_backend
+    volumes:
+      - ./backend:/backend
+    working_dir: /backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      COHERE_API_KEY: ${COHERE_API_KEY}
+
+volumes:
+  covra_db_data:
