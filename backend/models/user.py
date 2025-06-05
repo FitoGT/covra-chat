@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -13,3 +13,4 @@ class User(Base):
     lastname = Column(String(100), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
+    enabled = Column(Boolean, default=True, nullable=False)
