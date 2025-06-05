@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: covra-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: covra-backend
+  template:
+    metadata:
+      labels:
+        app: covra-backend
+    spec:
+      containers:
+        - name: covra-backend
+          image: fitojgt/covra-backend:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: DATABASE_URL
+              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@covra-postgres:5432/$(POSTGRES_DB)"
