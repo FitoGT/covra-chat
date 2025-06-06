@@ -3,14 +3,18 @@ from sqlalchemy.orm import Session
 from dtos.user_dto import UserRegisterRequestDto, UserDto, UserRegisterResponseDto
 from db.database import get_db
 from services.user_service import UserService
+from utils.auth import get_current_user
 from fastapi import HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+security = HTTPBearer()
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.get("/")
-def list_users(db: Session = Depends(get_db)):
+def list_users(db: Session = Depends(get_db), current_user: UserDto = Depends(get_current_user),):
     service = UserService(db)
     return service.list_users()
 
