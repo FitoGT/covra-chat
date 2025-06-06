@@ -1,19 +1,21 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { loginSchema } from '../lib/zodSchemas'
 import { AuthForm } from '../components/AuthForm'
-import { login } from '../client/api-client'
 import type { LoginRequest } from '../types/api-types'
 import { ROUTES } from '../constants/urls'
-import { useRedirectIfAuthenticated } from '../hooks/useRedirectIfAuthenticated '
+import { useRedirectIfAuthenticated } from '../hooks/useRedirectIfAuthenticated'
+import { useLoginMutation } from '../client/mutations/useLoginMutations'
 
 
 export default function Login() {
   useRedirectIfAuthenticated()
   const navigate = useNavigate()
+  const { mutateAsync } = useLoginMutation()
+
 
   const handleLogin = async (data: LoginRequest) => {
     try {
-      await login(data)
+      await mutateAsync(data)
       navigate(ROUTES.CHAT)
     } catch (err) {
       console.error(err)

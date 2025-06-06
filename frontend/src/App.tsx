@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { generateCoverLetter } from './client/api-client'
+import { useGenerateCoverLetterMutation } from './client/mutations/useCoverLettersMutations'
 import covraIcon from './assets/covra-icon.png'
 
 interface Message {
@@ -10,11 +10,11 @@ interface Message {
 function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState<'cv' | 'job' | 'chat'>('cv')
   const [cv, setCv] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const { mutateAsync, isPending } = useGenerateCoverLetterMutation()
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -50,11 +50,10 @@ function App() {
   }
 
   const handleCoverLetterGeneration = async (jobDescription: string) => {
-  setIsLoading(true)
   setError('')
 
   try {
-    const response = await generateCoverLetter({
+    const response = await mutateAsync({
       cv,
       job_description: jobDescription,
     })
@@ -63,8 +62,6 @@ function App() {
   } catch (err) {
     console.error('Error generating cover letter:', err)
     setError('Failed to generate cover letter. Please check your API key and try again.')
-  } finally {
-    setIsLoading(false)
   }
 }
 
@@ -116,7 +113,7 @@ function App() {
             </div>
           ))
         )}
-        {isLoading && (
+        {isPending && (
           <div className="flex justify-start">
             <div className="bg-white text-gray-800 rounded-lg p-4 shadow">
               <div className="flex space-x-2">
@@ -150,12 +147,12 @@ function App() {
                 : 'Type your message...'
             }
             className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            disabled={isLoading}
+            disabled={isPending}
           />
           <button
             type="submit"
             className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-            disabled={isLoading || !input.trim()}
+            disabled={isPending || !input.trim()}
           >
             Send
           </button>
