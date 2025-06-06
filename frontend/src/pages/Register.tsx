@@ -1,16 +1,20 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { registerSchema } from '../lib/zodSchemas'
 import { AuthForm } from '../components/AuthForm'
-import { register } from '../client/api-client'
 import type { RegisterRequest } from '../types/api-types'
+import { ROUTES } from '../constants/urls'
+import { useRedirectIfAuthenticated } from '../hooks/useRedirectIfAuthenticated'
+import { useUserRegisterMutation } from '../client/mutations/useUserMutations'
 
 export default function Register() {
+  useRedirectIfAuthenticated()
   const navigate = useNavigate()
+  const { mutateAsync } = useUserRegisterMutation()
 
   const handleRegister = async (data: RegisterRequest) => {
     try {
-      await register(data)
-      navigate('/chat')
+      await mutateAsync(data)
+      navigate(ROUTES.CHAT)
     } catch (err) {
       console.error(err)
       alert('Registration failed')
