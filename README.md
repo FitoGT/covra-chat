@@ -20,6 +20,8 @@ A modern web application that generates personalized cover letters using AI. Bui
 - Python 3.8 or higher
 - Node.js 16 or higher
 - A Cohere AI API key
+- Docker & Docker Compose
+- (Optional) Kubernetes & kubectl + minikube or a cloud provider
 
 ## Setup
 
@@ -34,7 +36,8 @@ cd backend
 ```bash
 # Windows
 python -m venv venv
-.\venv\Scripts\activate
+.
+env\Scripts ctivate
 
 # Linux/Mac
 python -m venv venv
@@ -51,7 +54,12 @@ pip install -r requirements.txt
 COHERE_API_KEY=your_api_key_here
 ```
 
-5. Start the backend server:
+5. Run Alembic migrations (ensure database is running):
+```bash
+alembic upgrade head
+```
+
+6. Start the backend server:
 ```bash
 uvicorn main:app --reload
 ```
@@ -77,6 +85,36 @@ npm run dev
 
 The frontend will be running at `http://localhost:5173`
 
+## Docker Setup
+
+1. Ensure you have Docker and Docker Compose installed.
+2. Build and start the containers:
+```bash
+docker-compose up --build
+```
+3. Access the frontend at `http://localhost:5173` and the backend at `http://localhost:8000`.
+
+> Note: Modify environment variables in `.env` and `docker-compose.yml` as needed.
+
+## Kubernetes Setup (Optional)
+
+1. Make sure `kubectl` and `minikube` are installed and configured.
+2. Start minikube:
+```bash
+minikube start
+```
+3. Apply the Kubernetes manifests:
+```bash
+kubectl apply -f k8s/
+```
+4. To access the services:
+```bash
+minikube service covra-frontend
+minikube service covra-backend
+```
+
+> Make sure your Kubernetes manifests include ConfigMaps or Secrets with the required environment variables.
+
 ## How to Use
 
 1. Open your browser and go to `http://localhost:5173`
@@ -88,18 +126,21 @@ The frontend will be running at `http://localhost:5173`
 
 ## Technologies Used
 
-- Frontend:
+- **Frontend:**
   - React
   - TypeScript
   - Tailwind CSS
   - Vite
 
-- Backend:
+- **Backend:**
   - FastAPI
+  - Python
   - LangChain
   - Cohere AI
-  - Python
+  - **Alembic** (for database migrations)
+  - **Docker** (for containerization)
+  - **Kubernetes** (for orchestration and deployment)
 
 ## Note
 
-Make sure both the backend and frontend servers are running simultaneously for the application to work properly. The backend handles the AI processing while the frontend provides the user interface. 
+Make sure both the backend and frontend servers are running simultaneously for the application to work properly. The backend handles the AI processing while the frontend provides the user interface.
