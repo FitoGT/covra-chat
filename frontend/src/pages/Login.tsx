@@ -4,9 +4,11 @@ import { AuthForm } from '../components/AuthForm'
 import { login } from '../client/api-client'
 import type { LoginRequest } from '../types/api-types'
 import { ROUTES } from '../constants/urls'
+import { useRedirectIfAuthenticated } from '../hooks/useRedirectIfAuthenticated '
 
 
 export default function Login() {
+  useRedirectIfAuthenticated()
   const navigate = useNavigate()
 
   const handleLogin = async (data: LoginRequest) => {

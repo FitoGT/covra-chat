@@ -7,6 +7,12 @@ import {
   GenerateCoverLetterResponse
 } from '../types/api-types'
 
+const saveTokenWithExpiry = (token: string) => {
+  const expiry = Date.now() + 60 * 60 * 1000 // 60 minutos
+  localStorage.setItem('token', token)
+  localStorage.setItem('token_expiry', expiry.toString())
+}
+
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   const res = await fetch('http://localhost:8000/auth/login', {
     method: 'POST',
@@ -18,7 +24,7 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
 
   const json = await res.json()
   const token = json.access_token || json.token
-  if (token) localStorage.setItem('token', token)
+  if (token) saveTokenWithExpiry(token)
 
   return json
 }
@@ -32,7 +38,11 @@ export const register = async (data: RegisterRequest): Promise<RegisterResponse>
 
   if (!res.ok) throw new Error('Register failed')
 
-  return res.json()
+  const json = await res.json()
+  const token = json.access_token || json.token
+  if (token) saveTokenWithExpiry(token)
+
+  return json
 }
 
 /**

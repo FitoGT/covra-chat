@@ -4,8 +4,10 @@ import { AuthForm } from '../components/AuthForm'
 import { register } from '../client/api-client'
 import type { RegisterRequest } from '../types/api-types'
 import { ROUTES } from '../constants/urls'
+import { useRedirectIfAuthenticated } from '../hooks/useRedirectIfAuthenticated '
 
 export default function Register() {
+  useRedirectIfAuthenticated()
   const navigate = useNavigate()
 
   const handleRegister = async (data: RegisterRequest) => {
