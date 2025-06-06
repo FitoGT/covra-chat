@@ -10,5 +10,6 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 @router.post("/login", response_model=LoginResponseDto)
 def login(request: LoginRequestDto, db: Session = Depends(get_db)):
     auth_service = AuthService(db)
+    print('entre')
     token = auth_service.authenticate_user(request.email, request.password)
     return {"access_token": token, "token_type": "bearer"}
