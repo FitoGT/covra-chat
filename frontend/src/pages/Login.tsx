@@ -3,6 +3,8 @@ import { loginSchema } from '../lib/zodSchemas'
 import { AuthForm } from '../components/AuthForm'
 import { login } from '../client/api-client'
 import type { LoginRequest } from '../types/api-types'
+import { ROUTES } from '../constants/urls'
+
 
 export default function Login() {
   const navigate = useNavigate()
@@ -10,7 +12,7 @@ export default function Login() {
   const handleLogin = async (data: LoginRequest) => {
     try {
       await login(data)
-      navigate('/chat')
+      navigate(ROUTES.CHAT)
     } catch (err) {
       console.error(err)
       alert('Invalid credentials')

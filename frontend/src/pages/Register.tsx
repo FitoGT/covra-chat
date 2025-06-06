@@ -3,6 +3,7 @@ import { registerSchema } from '../lib/zodSchemas'
 import { AuthForm } from '../components/AuthForm'
 import { register } from '../client/api-client'
 import type { RegisterRequest } from '../types/api-types'
+import { ROUTES } from '../constants/urls'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -10,7 +11,7 @@ export default function Register() {
   const handleRegister = async (data: RegisterRequest) => {
     try {
       await register(data)
-      navigate('/chat')
+      navigate(ROUTES.CHAT)
     } catch (err) {
       console.error(err)
       alert('Registration failed')
