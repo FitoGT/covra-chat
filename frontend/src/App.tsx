@@ -50,19 +50,23 @@ function App() {
   }
 
   const handleCoverLetterGeneration = async (jobDescription: string) => {
-    setIsLoading(true)
-    setError('')
+  setIsLoading(true)
+  setError('')
 
-    try {
-      const coverLetter = await generateCoverLetter(cv, jobDescription)
-      setMessages(prev => [...prev, { role: 'assistant', content: coverLetter }])
-    } catch (err) {
-      console.error('Error generating cover letter:', err)
-      setError('Failed to generate cover letter. Please check your API key and try again.')
-    } finally {
-      setIsLoading(false)
-    }
+  try {
+    const response = await generateCoverLetter({
+      cv,
+      job_description: jobDescription,
+    })
+
+    setMessages(prev => [...prev, { role: 'assistant', content: response.cover_letter }])
+  } catch (err) {
+    console.error('Error generating cover letter:', err)
+    setError('Failed to generate cover letter. Please check your API key and try again.')
+  } finally {
+    setIsLoading(false)
   }
+}
 
   const handleNewCoverLetter = () => {
     setMessages([{ role: 'user', content: `CV: ${cv}` }])

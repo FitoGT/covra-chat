@@ -2,15 +2,17 @@ import { useNavigate, Link } from 'react-router-dom'
 import { loginSchema } from '../lib/zodSchemas'
 import { AuthForm } from '../components/AuthForm'
 import { login } from '../client/api-client'
+import type { LoginRequest } from '../types/api-types'
 
 export default function Login() {
   const navigate = useNavigate()
 
-  const handleLogin = async (data: any) => {
+  const handleLogin = async (data: LoginRequest) => {
     try {
-      await login(data.email, data.password)
+      await login(data)
       navigate('/chat')
     } catch (err) {
+      console.error(err)
       alert('Invalid credentials')
     }
   }
@@ -18,7 +20,7 @@ export default function Login() {
   return (
     <div className="max-w-md mx-auto mt-20">
       <h2 className="text-2xl font-semibold mb-6">Login</h2>
-      <AuthForm
+      <AuthForm<LoginRequest>
         schema={loginSchema}
         onSubmit={handleLogin}
         fields={[
@@ -28,7 +30,8 @@ export default function Login() {
         buttonText="Log In"
       />
       <p className="mt-4 text-sm">
-        Don’t have an account? <Link to="/register" className="text-indigo-600">Register here</Link>
+        Don’t have an account?{' '}
+        <Link to="/register" className="text-indigo-600">Register here</Link>
       </p>
     </div>
   )

@@ -1,4 +1,39 @@
-const API_BASE = 'http://localhost:8000'
+import {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  RegisterResponse,
+  GenerateCoverLetterRequest,
+  GenerateCoverLetterResponse
+} from '../types/api-types'
+
+export const login = async (data: LoginRequest): Promise<LoginResponse> => {
+  const res = await fetch('http://localhost:8000/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+
+  if (!res.ok) throw new Error('Login failed')
+
+  const json = await res.json()
+  const token = json.access_token || json.token
+  if (token) localStorage.setItem('token', token)
+
+  return json
+}
+
+export const register = async (data: RegisterRequest): Promise<RegisterResponse> => {
+  const res = await fetch('http://localhost:8000/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+
+  if (!res.ok) throw new Error('Register failed')
+
+  return res.json()
+}
 
 /**
  * Generate a cover letter based on CV and job description
@@ -6,78 +41,22 @@ const API_BASE = 'http://localhost:8000'
  * @param jobDescription The job description
  * @returns The generated cover letter
  */
-export const generateCoverLetter = async (cv: string, jobDescription: string): Promise<string> => {
-  try {
-    const response = await fetch(`${API_BASE}/cover-letter/generate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify({
-        cv,
-        job_description: jobDescription,
-      }),
-    })
+export const generateCoverLetter = async (
+  data: GenerateCoverLetterRequest
+): Promise<GenerateCoverLetterResponse> => {
 
-    if (!response.ok) {
-      throw new Error('Failed to generate cover letter')
-    }
-
-    const data = await response.json()
-    return data.cover_letter
-  } catch (error) {
-    console.error('Error generating cover letter:', error)
-    throw error
-  }
-}
-
-/**
- * Register a new user
- * @param name
- * @param email
- * @param password
- * @returns JWT token or success status
- */
-export const register = async (name: string, lastname: string, email: string, password: string): Promise<void> => {
-  const response = await fetch(`${API_BASE}/user/register`, {
+  const response = await fetch('http://localhost:8000/cover-letter/generate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-    body: JSON.stringify({ name, email, lastname, password }),
+    body: JSON.stringify(data),
   })
 
   if (!response.ok) {
-    throw new Error('Failed to register')
-  }
-}
-
-/**
- * Login an existing user
- * @param email
- * @param password
- * @returns JWT token string
- */
-export const login = async (email: string, password: string): Promise<string> => {
-  const response = await fetch(`${API_BASE}/auth/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-  })
-
-  if (!response.ok) {
-    throw new Error('Failed to login')
+    throw new Error('Failed to generate cover letter')
   }
 
-  const data = await response.json()
-  const token = data.access_token || data.token
-  if (!token) {
-    throw new Error('Token not found in response')
-  }
-
-  localStorage.setItem('token', token)
-  return token
+  return response.json()
 }
