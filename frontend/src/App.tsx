@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useGenerateCoverLetterMutation } from './client/mutations/useCoverLettersMutations'
-import covraIcon from './assets/covra-icon.png'
+import Header from './components/Header'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -65,29 +65,14 @@ function App() {
   }
 }
 
-  const handleNewCoverLetter = () => {
+ /*  const handleNewCoverLetter = () => {
     setMessages([{ role: 'user', content: `CV: ${cv}` }])
     setStep('job')
-  }
+  } */
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
-      <header className="bg-white shadow-sm py-4 px-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <img src={covraIcon} alt="Covra Icon" className="h-8 w-8" />
-            <h1 className="text-xl font-semibold text-gray-800">Cover Letter Generator</h1>
-          </div>
-          {step === 'chat' && (
-            <button
-              onClick={handleNewCoverLetter}
-              className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              New Cover Letter
-            </button>
-          )}
-        </div>
-      </header>
+      <Header />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
