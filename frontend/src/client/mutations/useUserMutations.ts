@@ -3,7 +3,7 @@ import { RegisterRequest, RegisterResponse } from '../../types/api-types'
 import { saveTokenWithExpiry } from '../saveToken'
 
 const registerFn = async (data: RegisterRequest): Promise<RegisterResponse> => {
-    const res = await fetch('http://localhost:8000/auth/register', {
+    const res = await fetch('http://localhost:8000/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

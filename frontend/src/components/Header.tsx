@@ -11,6 +11,7 @@ const Header = () => {
   const authenticated = isAuthenticated()
 
   const login = () => navigate(ROUTES.LOGIN)
+  const register = () => navigate(ROUTES.REGISTER)
   const logout = () => {
     localStorage.clear()
     navigate(ROUTES.CHAT)
@@ -36,12 +37,21 @@ const Header = () => {
           {menuOpen && (
             <div className="absolute right-0 mt-2 w-36 bg-white border rounded shadow-lg z-10">
               {!authenticated ? (
-                <button
-                  onClick={login}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                >
-                  Login
-                </button>
+                <>
+                  <button
+                    onClick={login}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={register}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Register
+                  </button>
+                </>
+                
               ) : (
                 <button
                   onClick={() => logout()}
