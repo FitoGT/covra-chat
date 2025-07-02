@@ -5,22 +5,26 @@ from services.resume_service import ResumeService
 from utils.auth import get_current_user
 from fastapi.security import HTTPBearer
 from models.user import User
+from dtos.resume_dto import ResumeResponseDto, ResumesDto, ResumeDto
 
 security = HTTPBearer()
 
 router = APIRouter(prefix="/resumes", tags=["Resumes"])
 
 
-@router.get("/")
+@router.get("/", response_model=ResumesDto)
 def get_resumes_by_user(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     service = ResumeService(db)
-    return service.get_user_resumes(current_user.id)
+    resumes = service.get_user_resumes(current_user.id)
+
+    resume_dtos = [ResumeDto.model_validate(resume) for resume in resumes]
+    return ResumesDto(resumes=resume_dtos)
 
 
-@router.post("/", status_code=status.HTTP_202_ACCEPTED)
+@router.post("/", status_code=status.HTTP_202_ACCEPTED, response_model=ResumeResponseDto)
 async def create_resume(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
@@ -39,4 +43,4 @@ async def create_resume(
     background_tasks.add_task(
         service.process_resume_file, current_user.id, contents, file.content_type)
 
-    return {"message": "Resume is being processed in the background."}
+    return ResumeResponseDto(message="Resume is being processed in the background.")
