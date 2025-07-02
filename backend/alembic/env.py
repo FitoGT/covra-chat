@@ -1,5 +1,6 @@
 from models.cover_letter import CoverLetter
 from models.user import User
+from models.resume import Resume
 from db.database import Base
 import os
 from logging.config import fileConfig

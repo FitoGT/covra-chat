@@ -7,6 +7,7 @@ from startup import init_db
 from controllers.user_controller import router as user_router
 from controllers.cover_letter_controller import router as cover_letter
 from controllers.auth_controller import router as auth_router
+from controllers.resume_controller import router as resume_router
 
 
 load_dotenv()
@@ -26,6 +27,7 @@ init_db()
 app.include_router(user_router)
 app.include_router(cover_letter)
 app.include_router(auth_router)
+app.include_router(resume_router)
 
 
 @app.get("/")
